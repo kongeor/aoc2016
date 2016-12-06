@@ -10,9 +10,15 @@
         [hash i]
         (recur (inc i))))))
 
-(digest-id "ugkcyxxp" 1)
 
-(md5 "abc3231929")
-(md5 "abc5017308")
+(defn break-password [id]
+  (loop [i 1
+         pass ""]
+    (let [[hash i] (digest-id id i)
+          c (. hash substring 5 6)
+          pass (str pass c)]
+      (if (= 3 (count pass))
+        pass
+        (recur (inc i) pass)))))
 
-(str "asfd" 1)
+(break-password "ugkcyxxp")
