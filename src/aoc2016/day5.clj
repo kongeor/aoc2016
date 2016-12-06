@@ -32,22 +32,18 @@
     (Integer/parseInt (str c))
     (catch NumberFormatException e)))
 
-(char->int \1)
-
 (defn update-pass [pass c idx]
   (if-let [idx (char->int idx)]
-    (if (< -1 idx 8)
+    (if (and (< -1 idx 8) (nil? (get pass idx)))
       (assoc pass (char->int idx) (str c))
       pass)
     pass))
-
-(update-pass [nil nil nil] \c \1)
 
 (defn break-password-2 [id]
   (loop [i 1
          pass (vec (repeat 8 nil))]
     (let [[hash i] (digest-id id i)
-          [c idx] (. hash substring 5 8)
+          [idx c] (. hash substring 5 7)
           pass (update-pass pass c idx)]
       (if (solved? pass)
         pass
